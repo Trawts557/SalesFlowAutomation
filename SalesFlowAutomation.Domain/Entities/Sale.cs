@@ -4,6 +4,7 @@ namespace SalesFlowAutomation.Domain.Entities
 {
     public class Sale
     {
+        public int Id { get; private set; }
         public int CashierId { get; private set; }
         public int? CustomerId { get; private set; }
         private readonly List<SaleDetail> _details = new();

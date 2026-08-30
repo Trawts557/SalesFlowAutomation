@@ -6,8 +6,8 @@ namespace SalesFlowAutomation.Domain.Entities
 {
     public class Payment
     {
-        // TODO: Agregar SaleId a el pago en createSaleUseCase 
-        public int? SaleId { get; private set; }
+        public int Id { get; private set; }
+        public int SaleId { get; private set; }
         public decimal Amount { get; private set; }
         public DateTime? PaidAt { get; private set; }
         public PaymentStatus PaymentStatus { get; private set; } = PaymentStatus.Pending;

@@ -4,7 +4,7 @@ namespace SalesFlowAutomation.Application.Common
     public class OperationResult<T>
     {
         public bool IsSuccess { get; private set; }
-        public string Message { get; private set; }      
+        public string Message { get; private set; } = string.Empty;      
         public T? Data { get; private set; }
 
         private OperationResult() { }

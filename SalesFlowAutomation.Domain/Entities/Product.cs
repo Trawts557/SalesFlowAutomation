@@ -10,21 +10,25 @@ namespace SalesFlowAutomation.Domain.Entities
         public decimal UnitPrice { get; private set; }
         public int Stock { get; private set; }
 
-        public Product(int id, string name, decimal price, int stock)
+        public Product(string name, decimal unitPrice, int stock)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new DomainException("Name cant be null or empty");
+
+            if (unitPrice <= 0)
+                throw new DomainException("Price must be greater than zero");
+
+            Name = name;
+            UnitPrice = unitPrice;
+            Stock = stock;
+        }
+
+        public Product(int id, string name, decimal unitPrice, int stock) : this(name, unitPrice, stock)
         {
             if (id <= 0)
                 throw new DomainException("Id must be greater than zero");
 
-            if (string.IsNullOrWhiteSpace(name))
-                throw new DomainException("Name cant be null or empty");
-
-            if (price <= 0)
-                throw new DomainException("Price must be greater than zero");
-
             Id = id;
-            Name = name;
-            UnitPrice = price;
-            Stock = stock;
         }
     }
 }

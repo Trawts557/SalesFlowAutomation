@@ -4,7 +4,9 @@ namespace SalesFlowAutomation.Domain.Entities
 {
     public class SaleDetail
     {
+        public int Id { get; private set; }
         public int ProductId { get; private set; }
+        public int SaleId { get; private set; }
         public string Name { get; private set; }
         public decimal UnitPrice { get; private set; }
         public int Quantity { get; private set; }
