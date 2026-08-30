@@ -34,32 +34,18 @@ namespace SalesFlowAutomation.Application.UseCases.Sales
                 return OperationResult<CreateSaleResponse>.Failure(validationError);
             }
 
+            Sale sale;
+            Payment payment;
+
             try
             {
-                Sale sale = new(request!.CashierId, request.CustomerId);
+                sale = new(request!.CashierId, request.CustomerId);
 
                 await AddSaleDetailsAsync(request, sale);
 
-                // TODO: Agregar SaleId a el pago en createSaleUseCase 
-                var payment = new Payment(sale.Total, request.PaymentMethod);
+                payment = new Payment(sale.Total, request.PaymentMethod);
 
                 payment.MarkAsPaid();
-
-                await _saleRepository.AddAsync(sale);
-
-                await _paymentRepository.AddAsync(payment);
-
-                var response = new CreateSaleResponse
-                {
-                    PaymentStatus = payment.PaymentStatus,
-                    DiscountAmount = sale.DiscountAmount,
-                    Subtotal = sale.Subtotal,
-                    TaxAmount = sale.TaxAmount,
-                    Total = sale.Total
-                };
-
-                return OperationResult<CreateSaleResponse>.Success(response, "Sale completed successfully");
-
             }
             catch (DomainException ex)
             {
@@ -70,9 +56,23 @@ namespace SalesFlowAutomation.Application.UseCases.Sales
                 return OperationResult<CreateSaleResponse>.Failure(ex.Message);
             }
 
+            await _saleRepository.AddAsync(sale);
+            await _paymentRepository.AddAsync(payment);
+
+            var response = new CreateSaleResponse
+            {
+                PaymentStatus = payment.PaymentStatus,
+                DiscountAmount = sale.DiscountAmount,
+                Subtotal = sale.Subtotal,
+                TaxAmount = sale.TaxAmount,
+                Total = sale.Total
+            };
+
+            return OperationResult<CreateSaleResponse>.Success(response, "Sale completed successfully");
+
         }
 
-        private string? ValidateRequest(CreateSaleRequest? request)
+        private static string? ValidateRequest(CreateSaleRequest? request)
         {
             if (request is null)
                 return "Create sale request cant be null";
