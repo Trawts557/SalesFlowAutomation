@@ -11,6 +11,19 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    env:
+      ConnectionStrings__TestConnection: "Server=localhost,1433;Database=SalesFlowAutomationTestDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
+
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env: 
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: YourStrong!Passw0rd
+          MSSQL_PID: Developer
+        ports:
+          - 1433:1433
+
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v4
@@ -18,7 +31,7 @@ jobs:
       - name: Configurar .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
 
       - name: Restaurar dependencias
         run: dotnet restore
@@ -26,5 +39,22 @@ jobs:
       - name: Compilar el proyecto
         run: dotnet build --configuration Release --no-restore
 
+      - name: Esperar a SQL Server
+        run: |
+          for attempt_number in {1..30}; do
+            # Check whether SQL Server is accepting TCP connections on port 1433
+            if nc -z localhost 1433; then
+              echo "SQL Server está disponible"
+              exit 0
+            fi
+
+            echo "Esperando a SQL Server... Intento $attempt_number de 30"
+            sleep 2
+          done
+
+          echo "SQL Server no estuvo disponible a tiempo"
+          exit 1
+
       - name: Ejecutar pruebas
-        run: dotnet test --configuration Release --no-build
+        run: dotnet test --configuration Release --no-build --verbosity normal
+        
