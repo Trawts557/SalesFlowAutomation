@@ -6,5 +6,6 @@ namespace SalesFlowAutomation.Application.Sales.Interfaces
     public interface ISaleRepository
     {
         Task AddAsync(Sale sale);
+        Task<Sale?> GetByIdAsync(int id);
     }
 }

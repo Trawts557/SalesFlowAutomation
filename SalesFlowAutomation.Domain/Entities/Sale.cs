@@ -5,6 +5,7 @@ namespace SalesFlowAutomation.Domain.Entities
     public class Sale
     {
         public int Id { get; private set; }
+        public Payment? Payment { get; private set; }
         public int CashierId { get; private set; }
         public int? CustomerId { get; private set; }
         private readonly List<SaleDetail> _details = new();
@@ -18,6 +19,20 @@ namespace SalesFlowAutomation.Domain.Entities
         {
             CashierId = cashierId;
             CustomerId = customerId;
+        }
+
+        public void AddPayment(Payment payment)
+        {
+            if (payment == null)
+                throw new DomainException("Payment cant be null");
+
+            if (Payment != null)
+                throw new DomainException("Sale already has a payment");
+
+            if (payment.PaymentStatus != Enums.PaymentStatus.Paid)
+                throw new DomainException("Payment status must be paid");
+
+            Payment = payment;
         }
 
         public void AddDetail(Product product, int quantity)

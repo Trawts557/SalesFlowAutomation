@@ -1,10 +1,72 @@
 ﻿using SalesFlowAutomation.Domain.Entities;
+using SalesFlowAutomation.Domain.Enums;
 using SalesFlowAutomation.Domain.Exceptions;
 
 namespace SalesFlowAutomation.Tests.Domain
 {
     public class SaleTests
     {
+
+        [Fact]
+        public void AddPayment_WhenSaleAlreadyHasPayment_ShouldThrowDomainException()
+        {
+            int cashierId = 1;
+            int? customerId = null;
+            Sale sale = new(cashierId, customerId);
+
+            var payment = new Payment(13500, PaymentMethod.Card);
+            payment.MarkAsPaid();
+
+            sale.AddPayment(payment);
+
+            var exception = Assert.Throws<DomainException>(() => sale.AddPayment(payment));
+
+            Assert.Equal("Sale already has a payment", exception.Message);
+        }
+
+        [Fact]
+        public void AddPayment_WithNotPaidStatus_ShouldThrowDomainException()
+        {
+            int cashierId = 1;
+            int? customerId = null;
+            Sale sale = new(cashierId, customerId);
+
+            var payment = new Payment(12000, PaymentMethod.Card);
+
+            var exception = Assert.Throws<DomainException>(() => sale.AddPayment(payment));
+
+            Assert.Equal("Payment status must be paid", exception.Message);
+        }
+
+        [Fact]
+        public void AddPayment_WithNullPayment_ShouldThrowDomainException()
+        {
+            int cashierdId = 1;
+            int? customerId = null;
+            Sale sale = new(cashierdId, customerId);
+
+            Payment? payment = null;
+
+            var exception = Assert.Throws<DomainException>(() => sale.AddPayment(payment));
+            Assert.Equal("Payment cant be null", exception.Message);
+        }
+
+        [Fact]
+        public void AddPayment_WithValidPayment_ShouldAddPayment()
+        {
+            int cashierId = 1;
+            int? customerId = null;
+            Sale sale = new(cashierId, customerId);
+
+            var payment = new Payment(13500, PaymentMethod.Card);
+            payment.MarkAsPaid();
+
+            sale.AddPayment(payment);
+
+            Assert.NotNull(sale.Payment);
+            Assert.Equal(payment, sale.Payment);
+        }
+
         [Fact]
         public void AddDetail_WithInvalidQuantity_ShouldThrowDomainException()
         {

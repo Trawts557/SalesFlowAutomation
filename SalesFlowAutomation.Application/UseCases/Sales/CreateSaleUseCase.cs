@@ -46,6 +46,8 @@ namespace SalesFlowAutomation.Application.UseCases.Sales
                 payment = new Payment(sale.Total, request.PaymentMethod);
 
                 payment.MarkAsPaid();
+
+                sale.AddPayment(payment);
             }
             catch (DomainException ex)
             {

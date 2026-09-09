@@ -1,4 +1,5 @@
-﻿using SalesFlowAutomation.Application.Payments.Interfaces;
+﻿using SalesFlowAutomation.Application.Common;
+using SalesFlowAutomation.Application.Payments.Interfaces;
 using SalesFlowAutomation.Application.Products.Interfaces;
 using SalesFlowAutomation.Application.Sales.DTOs;
 using SalesFlowAutomation.Application.Sales.Interfaces;
@@ -54,7 +55,7 @@ namespace SalesFlowAutomation.Tests.Application
                 ]
             };
 
-            _productRepository.AddProduct(new Product(1, "New product", 100m, 12));
+            await _productRepository.AddAsync(new Product(1, "New product", 100m, 12));
 
             var result = await _createSaleUseCase.ExecuteAsync(createSaleRequest);
 
@@ -88,10 +89,15 @@ namespace SalesFlowAutomation.Tests.Application
             CreateProductForTest(22);
             CreateSaleRequest request = CreateSaleRequestForTest();
 
-            var result = await _createSaleUseCase.ExecuteAsync(request);
+            OperationResult<CreateSaleResponse> result = await _createSaleUseCase.ExecuteAsync(request);
+
+            Sale savedSale = _saleRepository.Sales.Single();
+            Assert.NotNull(savedSale.Payment);
+
+            Assert.Equal(PaymentMethod.Card, savedSale.Payment.PaymentMethod);
+            Assert.Equal(PaymentStatus.Paid, savedSale.Payment.PaymentStatus);
 
             Assert.NotNull(result.Data);
-
             CreateSaleResponse response = result.Data;
 
             Assert.Equal(PaymentStatus.Paid, response.PaymentStatus);
@@ -124,7 +130,7 @@ namespace SalesFlowAutomation.Tests.Application
         {
             Product product = new(1, "Monitor 144hz", 18000m, stock);
 
-            _productRepository.AddProduct(product);
+            _productRepository.AddAsync(product);
         }
 
         private CreateSaleRequest CreateSaleRequestForTest()
@@ -145,9 +151,10 @@ namespace SalesFlowAutomation.Tests.Application
         {
             private readonly List<Product> _products = new();
 
-            public void AddProduct(Product product)
+            public Task AddAsync(Product product)
             {
                 _products.Add(product);
+                return Task.CompletedTask;
             }
 
             public Task<Product?> GetByIdAsync(int id)
@@ -178,6 +185,11 @@ namespace SalesFlowAutomation.Tests.Application
                 _sales.Add(sale);
 
                 return Task.CompletedTask;
+            }
+
+            public Task<Sale?> GetByIdAsync(int id)
+            {
+                throw new NotImplementedException();
             }
         }
 

@@ -12,7 +12,7 @@ namespace SalesFlowAutomation.Infrastructure.Persistence.Configurations
             builder.HasKey(p => p.Id);
 
             builder.HasOne<Sale>()
-                .WithOne()
+                .WithOne(s => s.Payment)
                 .HasForeignKey<Payment>(p => p.SaleId)
                 .IsRequired();
 
