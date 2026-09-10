@@ -5,12 +5,30 @@ namespace SalesFlowAutomation.Tests.Infrastructure.TestDatabase
 {
     public static class TestDatabaseInitializer
     {
-        // Iniciar la BD de prueba con las tablas de la BD de desarrollo
+        private static readonly SemaphoreSlim _semaphore = new(1, 1);
+        private static bool _initialized = false;
         public static async Task InitializeAsync()
         {
-            await using var context = TestDbContextFactory.Create();
+            if (_initialized)
+                return;
 
-            await context.Database.MigrateAsync();
+            await _semaphore.WaitAsync();
+
+            try
+            {
+                if (_initialized)
+                    return;
+
+                await using var context = TestDbContextFactory.Create();
+                await context.Database.MigrateAsync();
+
+                _initialized = true;
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+
         }
     }
 }
