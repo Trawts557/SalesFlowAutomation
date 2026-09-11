@@ -6,7 +6,7 @@ using SalesFlowAutomation.Infrastructure.Persistence;
 namespace SalesFlowAutomation.Tests.Infrastructure.TestDatabase
 {
     // Crear AppDbContext usando la bd de pruebas
-    public static class TestDbContextFactory
+    internal static class TestDbContextFactory
     {
         private static readonly IConfiguration _configuration;
 
