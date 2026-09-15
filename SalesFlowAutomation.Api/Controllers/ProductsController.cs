@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SalesFlowAutomation.Application.UseCases.Product;
+using SalesFlowAutomation.Application.Products.DTOs;
+using SalesFlowAutomation.Application.UseCases.Products;
 
 namespace SalesFlowAutomation.Api.Controllers
 {
@@ -8,10 +9,15 @@ namespace SalesFlowAutomation.Api.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly GetProductByIdUseCase _getProductByIdUseCase;
+        private readonly CreateProductUseCase _createProductUseCase;
 
-        public ProductsController(GetProductByIdUseCase getProductByIdUseCase)
+        public ProductsController(
+            GetProductByIdUseCase getProductByIdUseCase,
+            CreateProductUseCase  createProductUseCase
+            )
         {
             _getProductByIdUseCase = getProductByIdUseCase;
+            _createProductUseCase = createProductUseCase;
         }
 
         [HttpGet("{id}")]
@@ -25,6 +31,19 @@ namespace SalesFlowAutomation.Api.Controllers
             }
 
             return Ok(response.Data);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProductAsync(CreateProductRequest request)
+        {
+            var response = await _createProductUseCase.ExecuteAsync(request);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = response.Data}, response.Data);
         }
     }
 }

@@ -3,7 +3,7 @@ using SalesFlowAutomation.Application.Common;
 using SalesFlowAutomation.Application.Products.DTOs;
 using SalesFlowAutomation.Application.Products.Interfaces;
 
-namespace SalesFlowAutomation.Application.UseCases.Product
+namespace SalesFlowAutomation.Application.UseCases.Products
 {
     public class GetProductByIdUseCase
     {

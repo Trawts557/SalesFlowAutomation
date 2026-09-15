@@ -1,20 +1,20 @@
 ﻿
 using SalesFlowAutomation.Application.Common;
 using SalesFlowAutomation.Application.Products.DTOs;
-using SalesFlowAutomation.Application.Products.Interfaces;
-using SalesFlowAutomation.Application.UseCases.Product;
+using SalesFlowAutomation.Application.UseCases.Products;
 using SalesFlowAutomation.Domain.Entities;
+using SalesFlowAutomation.Tests.Fakes;
 
 namespace SalesFlowAutomation.Tests.Application.ProductTest
 {
     public class GetProductByIdUseCaseTests
     {
-        private readonly FakeRepository _fakeRepository;
+        private readonly FakeProductRepository _fakeProductRepository;
         private readonly GetProductByIdUseCase _getProductByIdUseCase;
         public GetProductByIdUseCaseTests()
         {
-            _fakeRepository = new FakeRepository();
-            _getProductByIdUseCase = new GetProductByIdUseCase(_fakeRepository);
+            _fakeProductRepository = new FakeProductRepository();
+            _getProductByIdUseCase = new GetProductByIdUseCase(_fakeProductRepository);
         }
         [Fact]
         public async Task ExecuteAsync_WithNonExistentProduct_ShouldReturnFailure()
@@ -31,7 +31,7 @@ namespace SalesFlowAutomation.Tests.Application.ProductTest
         public async Task ExecuteAsync_WithExistingProduct_ShouldReturnSuccess()
         {
             var product = new Product(1, "Bateria", 15000, 12);
-            await _fakeRepository.AddAsync(product);
+            await _fakeProductRepository.AddAsync(product);
 
             OperationResult<GetProductByIdResponse> response = await _getProductByIdUseCase.ExecuteAsync(product.Id);
 
@@ -45,21 +45,6 @@ namespace SalesFlowAutomation.Tests.Application.ProductTest
             Assert.Equal(product.UnitPrice, response.Data.Price);
             Assert.Equal(product.Stock, response.Data.Stock);
 
-        }
-    }
-
-    public class FakeRepository : IProductRepository
-    {
-        private readonly List<Product> Products = new();
-        public Task AddAsync(Product product)
-        {
-            Products.Add(product);
-            return Task.CompletedTask;
-        }
-
-        public Task<Product?> GetByIdAsync(int id)
-        {
-            return Task.FromResult(Products.FirstOrDefault(p => p.Id == id));
         }
     }
 }

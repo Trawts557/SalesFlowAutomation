@@ -1,11 +1,11 @@
 ﻿using SalesFlowAutomation.Application.Common;
 using SalesFlowAutomation.Application.Payments.Interfaces;
-using SalesFlowAutomation.Application.Products.Interfaces;
 using SalesFlowAutomation.Application.Sales.DTOs;
 using SalesFlowAutomation.Application.Sales.Interfaces;
 using SalesFlowAutomation.Application.UseCases.Sales;
 using SalesFlowAutomation.Domain.Entities;
 using SalesFlowAutomation.Domain.Enums;
+using SalesFlowAutomation.Tests.Fakes;
 
 namespace SalesFlowAutomation.Tests.Application
 {
@@ -145,22 +145,6 @@ namespace SalesFlowAutomation.Tests.Application
                     new CreateSaleItemRequest{ ProductId = 1, Quantity = 1 }
                 ]
             };
-        }
-
-        private class FakeProductRepository : IProductRepository
-        {
-            private readonly List<Product> _products = new();
-
-            public Task AddAsync(Product product)
-            {
-                _products.Add(product);
-                return Task.CompletedTask;
-            }
-
-            public Task<Product?> GetByIdAsync(int id)
-            {
-                return Task.FromResult(_products.SingleOrDefault(x => x.Id == id));
-            }
         }
 
         private class FakePaymentRepository : IPaymentRepository

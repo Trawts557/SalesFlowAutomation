@@ -18,6 +18,9 @@ namespace SalesFlowAutomation.Domain.Entities
             if (unitPrice <= 0)
                 throw new DomainException("Price must be greater than zero");
 
+            if (stock < 0)
+                throw new DomainException("Stock must be greater than zero");
+
             Name = name;
             UnitPrice = unitPrice;
             Stock = stock;
