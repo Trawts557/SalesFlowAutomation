@@ -19,5 +19,21 @@ namespace SalesFlowAutomation.Tests.Fakes
         {
             return Task.FromResult(_products.SingleOrDefault(x => x.Id == id));
         }
+
+        public Task<List<Product>> GetAllAsync()
+        {
+            return Task.FromResult(_products.ToList());
+        }
+
+        public Task UpdateAsync(Product product)
+        {
+            var existingProduct = _products.FirstOrDefault(p => p.Id == product.Id);
+
+            existingProduct.Name = product.Name;
+            existingProduct.UnitPrice = product.UnitPrice;
+
+            return Task.CompletedTask;
+        }
+
     }
 }

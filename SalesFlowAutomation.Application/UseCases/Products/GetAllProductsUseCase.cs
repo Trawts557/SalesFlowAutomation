@@ -16,7 +16,22 @@ namespace SalesFlowAutomation.Application.UseCases.Products
 
         public async Task<List<ProductListItemResponse>> ExecuteAsync()
         {
-            throw new NotImplementedException();
+            var products = await _productRepository.GetAllAsync();
+
+            List<ProductListItemResponse> productResponseList = new();
+
+            foreach (var item in products)
+            {
+                var itemMapped = new ProductListItemResponse
+                {
+                    Name = item.Name,
+                    UnitPrice = item.UnitPrice
+                };
+
+                productResponseList.Add(itemMapped);
+            }
+            
+            return productResponseList;
         }
     }
 }

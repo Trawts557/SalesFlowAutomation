@@ -14,6 +14,13 @@ namespace SalesFlowAutomation.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<List<Product>> GetAllAsync()
+        {
+            var products = _context.Products.ToList();
+
+            return products;
+        }
+
         public async Task<Product?> GetByIdAsync(int id)
         {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
@@ -25,6 +32,17 @@ namespace SalesFlowAutomation.Infrastructure.Repositories
         public async Task AddAsync(Product product)
         {
             await _context.Products.AddAsync(product);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Product product)
+        {
+            var existingProduct = _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+            existingProduct.Name = product.Name;
+            existingProduct.Stock = product.Detail;
+            existingProduct.UnitPrice = product.UnitPrice;  
+            
             await _context.SaveChangesAsync();
         }
     }
