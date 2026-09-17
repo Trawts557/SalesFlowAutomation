@@ -20,7 +20,13 @@ namespace SalesFlowAutomation.Api.Controllers
             _createProductUseCase = createProductUseCase;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            return BadRequest();
+        }
+
+        [HttpGet("{id}", Name = "GetProductById")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var response = await _getProductByIdUseCase.ExecuteAsync(id);
@@ -34,7 +40,7 @@ namespace SalesFlowAutomation.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProductAsync(CreateProductRequest request)
+        public async Task<IActionResult> AddAsync(CreateProductRequest request)
         {
             var response = await _createProductUseCase.ExecuteAsync(request);
 
@@ -43,7 +49,14 @@ namespace SalesFlowAutomation.Api.Controllers
                 return BadRequest(response.Message);
             }
 
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = response.Data}, response.Data);
+            return CreatedAtRoute(
+                "GetProductById", 
+                new { id = response.Data }, 
+                new
+                {
+                    message = response.Message,
+                    id = response.Data
+                });
         }
     }
 }

@@ -20,7 +20,7 @@ namespace SalesFlowAutomation.Tests.Application.ProductTest
         public async Task ExecuteAsync_WithNonExistentProduct_ShouldReturnFailure()
         {
             int id = 99;
-            OperationResult<GetProductByIdResponse> response = await _getProductByIdUseCase.ExecuteAsync(id);
+            OperationResult<ProductResponse> response = await _getProductByIdUseCase.ExecuteAsync(id);
 
             Assert.NotNull(response);
             Assert.False(response.IsSuccess);
@@ -33,7 +33,7 @@ namespace SalesFlowAutomation.Tests.Application.ProductTest
             var product = new Product(1, "Bateria", 15000, 12);
             await _fakeProductRepository.AddAsync(product);
 
-            OperationResult<GetProductByIdResponse> response = await _getProductByIdUseCase.ExecuteAsync(product.Id);
+            OperationResult<ProductResponse> response = await _getProductByIdUseCase.ExecuteAsync(product.Id);
 
             Assert.NotNull(response);
             Assert.NotNull(response.Data);

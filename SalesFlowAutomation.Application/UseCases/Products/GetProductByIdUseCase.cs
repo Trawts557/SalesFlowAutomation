@@ -14,17 +14,17 @@ namespace SalesFlowAutomation.Application.UseCases.Products
             _productRepository = productRepository;
         }
 
-        public async Task<OperationResult<GetProductByIdResponse>> ExecuteAsync(int id)
+        public async Task<OperationResult<ProductResponse>> ExecuteAsync(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
 
             if (product == null)
             {
-                return OperationResult<GetProductByIdResponse>.Failure($"Product with id [{id}] not found");
+                return OperationResult<ProductResponse>.Failure($"Product with id [{id}] not found");
             }
 
             var getProductResponse =
-                new GetProductByIdResponse
+                new ProductResponse
                 {
                     Id = product.Id,
                     Name = product.Name,
@@ -32,7 +32,7 @@ namespace SalesFlowAutomation.Application.UseCases.Products
                     Stock = product.Stock
                 };
 
-            return OperationResult<GetProductByIdResponse>.Success(getProductResponse, "Product obtained succesfully");
+            return OperationResult<ProductResponse>.Success(getProductResponse, "Product obtained succesfully");
         }
     }
 }

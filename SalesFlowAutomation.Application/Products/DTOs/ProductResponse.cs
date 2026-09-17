@@ -1,7 +1,7 @@
 ﻿
 namespace SalesFlowAutomation.Application.Products.DTOs
 {
-    public class GetProductByIdResponse
+    public class ProductResponse
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
