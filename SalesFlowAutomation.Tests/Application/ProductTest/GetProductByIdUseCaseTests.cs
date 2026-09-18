@@ -42,7 +42,7 @@ namespace SalesFlowAutomation.Tests.Application.ProductTest
             Assert.Equal("Product obtained succesfully", response.Message);
             Assert.Equal(product.Id, response.Data.Id);
             Assert.Equal(product.Name, response.Data.Name);
-            Assert.Equal(product.UnitPrice, response.Data.Price);
+            Assert.Equal(product.UnitPrice, response.Data.UnitPrice);
             Assert.Equal(product.Stock, response.Data.Stock);
 
         }

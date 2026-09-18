@@ -29,8 +29,7 @@ namespace SalesFlowAutomation.Tests.Fakes
         {
             var existingProduct = _products.FirstOrDefault(p => p.Id == product.Id);
 
-            existingProduct.Name = product.Name;
-            existingProduct.UnitPrice = product.UnitPrice;
+            existingProduct.Update(product.Name, product.UnitPrice, product.Stock);
 
             return Task.CompletedTask;
         }

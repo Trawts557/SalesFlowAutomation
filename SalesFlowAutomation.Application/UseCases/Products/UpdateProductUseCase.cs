@@ -4,11 +4,11 @@ using SalesFlowAutomation.Application.Products.Interfaces;
 
 namespace SalesFlowAutomation.Application.UseCases.Products
 {
-    public class UpdateProductsUseCase
+    public class UpdateProductUseCase
     {
         private readonly IProductRepository _productRepository;
 
-        public UpdateProductsUseCase(IProductRepository productRepository)
+        public UpdateProductUseCase(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }

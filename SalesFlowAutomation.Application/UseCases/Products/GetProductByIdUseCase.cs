@@ -28,7 +28,7 @@ namespace SalesFlowAutomation.Application.UseCases.Products
                 {
                     Id = product.Id,
                     Name = product.Name,
-                    Price = product.UnitPrice,
+                    UnitPrice = product.UnitPrice,
                     Stock = product.Stock
                 };
 

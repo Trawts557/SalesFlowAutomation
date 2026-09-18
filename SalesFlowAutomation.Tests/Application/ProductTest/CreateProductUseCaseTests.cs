@@ -29,7 +29,7 @@ namespace SalesFlowAutomation.Tests.Application.ProductTest
             Assert.Equal("Product created succesfully", response.Message);
 
             var savedProduct = Assert.Single(_fakeProductRepository.Products);
-
+            
             Assert.Equal(request.Name, savedProduct.Name);
             Assert.Equal(request.UnitPrice, savedProduct.UnitPrice);
             Assert.Equal(request.Stock, savedProduct.Stock);

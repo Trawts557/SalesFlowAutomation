@@ -13,7 +13,7 @@ namespace SalesFlowAutomation.Tests.Application.ProductTest
         public UpdateProductUseCaseTests()
         {
             _fakeProductRepository = new FakeProductRepository();
-            _updateProductUseCase = new UpdateProductUseCase();
+            _updateProductUseCase = new UpdateProductUseCase(_fakeProductRepository);
         }
 
         [Fact]
