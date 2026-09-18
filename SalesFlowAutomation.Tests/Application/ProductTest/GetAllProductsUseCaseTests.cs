@@ -27,20 +27,23 @@ namespace SalesFlowAutomation.Tests.Application.ProductTest
             await _fakeProductRepository.AddAsync(battery);
             await _fakeProductRepository.AddAsync(wire);
 
-            List<ProductListItemResponse> productList = await _getAllProductsUseCase.ExecuteAsync();
+            List<ProductResponse> productList = await _getAllProductsUseCase.ExecuteAsync();
 
-            var getBattery = productList.Single(p => p.Id == battery.Id);
-            var getCharger = productList.Single(p => p.Id == charger.Id);
-            var getWire = productList.Single(p => p.Id == wire.Id);
+            var getBattery = _fakeProductRepository.Products.Single(p => p.Id == battery.Id);
+            var getCharger = _fakeProductRepository.Products.Single(p => p.Id == charger.Id);
+            var getWire = _fakeProductRepository.Products.Single(p => p.Id == wire.Id);
 
-            Assert.NotEmpty(productList);
+            Assert.NotEmpty(_fakeProductRepository.Products);
 
+            Assert.Equal(battery.Id, getBattery.Id);
             Assert.Equal(battery.Name, getBattery.Name);
             Assert.Equal(battery.UnitPrice, getBattery.UnitPrice);
 
+            Assert.Equal(charger.Id, getCharger.Id);
             Assert.Equal(charger.Name, getCharger.Name);
             Assert.Equal(charger.UnitPrice, getCharger.UnitPrice);
 
+            Assert.Equal(wire.Id, getWire.Id);
             Assert.Equal(wire.Name, getWire.Name);
             Assert.Equal(wire.UnitPrice, getWire.UnitPrice);
 
@@ -49,7 +52,7 @@ namespace SalesFlowAutomation.Tests.Application.ProductTest
         [Fact]
         public async Task ExecuteAsync_WithNoProducts_ShouldReturnEmptyList()
         {
-            List<ProductListItemResponse> productList = await _getAllProductsUseCase.ExecuteAsync();
+            List<ProductResponse> productList = await _getAllProductsUseCase.ExecuteAsync();
 
             Assert.Empty(productList);
         }

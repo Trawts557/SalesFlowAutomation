@@ -1,5 +1,4 @@
 ﻿
-using SalesFlowAutomation.Application.Common;
 using SalesFlowAutomation.Application.Products.DTOs;
 using SalesFlowAutomation.Application.Products.Interfaces;
 
@@ -14,18 +13,21 @@ namespace SalesFlowAutomation.Application.UseCases.Products
             _productRepository = productRepository;
         }
 
-        public async Task<List<ProductListItemResponse>> ExecuteAsync()
+        public async Task<List<ProductResponse>> ExecuteAsync()
         {
             var products = await _productRepository.GetAllAsync();
 
-            List<ProductListItemResponse> productResponseList = new();
+            List<ProductResponse> productResponseList = new();
 
             foreach (var item in products)
             {
-                var itemMapped = new ProductListItemResponse
+                var itemMapped = new ProductResponse
                 {
+                    Id = item.Id,
                     Name = item.Name,
-                    UnitPrice = item.UnitPrice
+                    UnitPrice = item.UnitPrice,
+                    Stock = item.Stock
+
                 };
 
                 productResponseList.Add(itemMapped);
