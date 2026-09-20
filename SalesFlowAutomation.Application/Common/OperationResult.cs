@@ -6,6 +6,7 @@ namespace SalesFlowAutomation.Application.Common
         public bool IsSuccess { get; private set; }
         public string Message { get; private set; } = string.Empty;      
         public T? Data { get; private set; }
+        public int? StatusCode { get; private set; }
 
         private OperationResult() { }
 
@@ -25,6 +26,16 @@ namespace SalesFlowAutomation.Application.Common
             {
                 IsSuccess = false,
                 Message = mensaje,
+            };
+        }
+
+        public static OperationResult<T> Failure(string mensaje, int statusCode)
+        {
+            return new OperationResult<T>
+            {
+                IsSuccess = false,
+                Message = mensaje,
+                StatusCode = statusCode
             };
         }
 

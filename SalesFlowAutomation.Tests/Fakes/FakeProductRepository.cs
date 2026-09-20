@@ -25,14 +25,9 @@ namespace SalesFlowAutomation.Tests.Fakes
             return Task.FromResult(_products.ToList());
         }
 
-        public Task UpdateAsync(Product product)
+        public Task SaveChangesAsync()
         {
-            var existingProduct = _products.FirstOrDefault(p => p.Id == product.Id);
-
-            existingProduct.Update(product.Name, product.UnitPrice, product.Stock);
-
             return Task.CompletedTask;
         }
-
     }
 }

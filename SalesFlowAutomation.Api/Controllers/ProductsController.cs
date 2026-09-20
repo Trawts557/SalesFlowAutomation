@@ -11,16 +11,19 @@ namespace SalesFlowAutomation.Api.Controllers
         private readonly GetProductByIdUseCase _getProductByIdUseCase;
         private readonly CreateProductUseCase _createProductUseCase;
         private readonly GetAllProductsUseCase _getAllProductsUseCase;
+        private readonly UpdateProductUseCase _updateProductUseCase;
 
         public ProductsController(
             GetProductByIdUseCase getProductByIdUseCase,
-            CreateProductUseCase  createProductUseCase,
-            GetAllProductsUseCase getAllProductsUseCase
+            CreateProductUseCase createProductUseCase,
+            GetAllProductsUseCase getAllProductsUseCase,
+            UpdateProductUseCase updateProductUseCase
             )
         {
             _getProductByIdUseCase = getProductByIdUseCase;
             _createProductUseCase = createProductUseCase;
             _getAllProductsUseCase = getAllProductsUseCase;
+            _updateProductUseCase = updateProductUseCase;
         }
 
         [HttpGet]
@@ -31,7 +34,7 @@ namespace SalesFlowAutomation.Api.Controllers
             return Ok(products);
         }
 
-        [HttpGet("{id}", Name = "GetProductById")]
+        [HttpGet("{id:int}", Name = "GetProductById")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var response = await _getProductByIdUseCase.ExecuteAsync(id);
@@ -55,8 +58,8 @@ namespace SalesFlowAutomation.Api.Controllers
             }
 
             return CreatedAtRoute(
-                "GetProductById", 
-                new { id = response.Data }, 
+                "GetProductById",
+                new { id = response.Data },
                 new
                 {
                     message = response.Message,
@@ -64,10 +67,20 @@ namespace SalesFlowAutomation.Api.Controllers
                 });
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync(UpdateProductRequest request)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateAsync(int id, UpdateProductRequest request)
         {
-            return BadRequest();
+            var response = await _updateProductUseCase.ExecuteAsync(id, request);
+
+            if (!response.IsSuccess)
+            {   
+                if (response.StatusCode == 404)
+                    return NotFound(response.Message );
+
+                return BadRequest(response.Message);
+            }
+
+            return Ok(response.Data);           
         }
     }
 }

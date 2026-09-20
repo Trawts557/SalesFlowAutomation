@@ -24,6 +24,7 @@ builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 builder.Services.AddScoped<GetProductByIdUseCase>();
 builder.Services.AddScoped<CreateProductUseCase>();
 builder.Services.AddScoped<GetAllProductsUseCase>();
+builder.Services.AddScoped<UpdateProductUseCase>();
 
 
 var app = builder.Build();

@@ -35,12 +35,8 @@ namespace SalesFlowAutomation.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Product product)
+        public async Task SaveChangesAsync()
         {
-            var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == product.Id);
-
-            existingProduct.Update(product.Name, product.UnitPrice, product.Stock);
-            
             await _context.SaveChangesAsync();
         }
     }
