@@ -29,5 +29,11 @@ namespace SalesFlowAutomation.Tests.Fakes
         {
             return Task.CompletedTask;
         }
+
+        public Task DeleteAsync(Product product)
+        {
+            
+            return Task.CompletedTask;
+        }
     }
 }

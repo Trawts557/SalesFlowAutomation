@@ -6,30 +6,19 @@ namespace SalesFlowAutomation.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
-    {
-        private readonly GetProductByIdUseCase _getProductByIdUseCase;
-        private readonly CreateProductUseCase _createProductUseCase;
-        private readonly GetAllProductsUseCase _getAllProductsUseCase;
-        private readonly UpdateProductUseCase _updateProductUseCase;
-
-        public ProductsController(
+    public class ProductsController(
             GetProductByIdUseCase getProductByIdUseCase,
             CreateProductUseCase createProductUseCase,
             GetAllProductsUseCase getAllProductsUseCase,
-            UpdateProductUseCase updateProductUseCase
-            )
-        {
-            _getProductByIdUseCase = getProductByIdUseCase;
-            _createProductUseCase = createProductUseCase;
-            _getAllProductsUseCase = getAllProductsUseCase;
-            _updateProductUseCase = updateProductUseCase;
-        }
+            UpdateProductUseCase updateProductUseCase,
+            DeleteProductUseCase deleteProductUseCase
+        ) : ControllerBase
+    {
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var products = await _getAllProductsUseCase.ExecuteAsync();
+            var products = await getAllProductsUseCase.ExecuteAsync();
 
             return Ok(products);
         }
@@ -37,7 +26,7 @@ namespace SalesFlowAutomation.Api.Controllers
         [HttpGet("{id:int}", Name = "GetProductById")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
-            var response = await _getProductByIdUseCase.ExecuteAsync(id);
+            var response = await getProductByIdUseCase.ExecuteAsync(id);
 
             if (!response.IsSuccess)
             {
@@ -50,7 +39,7 @@ namespace SalesFlowAutomation.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync(CreateProductRequest request)
         {
-            var response = await _createProductUseCase.ExecuteAsync(request);
+            var response = await createProductUseCase.ExecuteAsync(request);
 
             if (!response.IsSuccess)
             {
@@ -70,7 +59,7 @@ namespace SalesFlowAutomation.Api.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateAsync(int id, UpdateProductRequest request)
         {
-            var response = await _updateProductUseCase.ExecuteAsync(id, request);
+            var response = await updateProductUseCase.ExecuteAsync(id, request);
 
             if (!response.IsSuccess)
             {   
@@ -81,6 +70,27 @@ namespace SalesFlowAutomation.Api.Controllers
             }
 
             return Ok(response.Data);           
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            var response = await deleteProductUseCase.ExecuteAsync(id);
+
+            if (!response.IsSuccess)
+            {
+                if (response.StatusCode == 400)
+                    return BadRequest(response.Message);
+
+                if (response.StatusCode == 404)
+                    return NotFound(response.Message);
+            }
+
+            return Ok(new
+            {
+                message = response.Message,
+                data = response.Data
+            });
         }
     }
 }

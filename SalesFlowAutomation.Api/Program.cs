@@ -21,11 +21,12 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 
 // Use Cases
+// - Product
 builder.Services.AddScoped<GetProductByIdUseCase>();
 builder.Services.AddScoped<CreateProductUseCase>();
 builder.Services.AddScoped<GetAllProductsUseCase>();
 builder.Services.AddScoped<UpdateProductUseCase>();
-
+builder.Services.AddScoped<DeleteProductUseCase>();
 
 var app = builder.Build();
 
