@@ -5,6 +5,7 @@ using SalesFlowAutomation.Application.Sales.Interfaces;
 using SalesFlowAutomation.Application.UseCases.Products;
 using SalesFlowAutomation.Infrastructure.Persistence;
 using SalesFlowAutomation.Infrastructure.Repositories;
+using SalesFlowAutomation.Application.UseCases.Sales;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,9 @@ builder.Services.AddScoped<CreateProductUseCase>();
 builder.Services.AddScoped<GetAllProductsUseCase>();
 builder.Services.AddScoped<UpdateProductUseCase>();
 builder.Services.AddScoped<DeleteProductUseCase>();
+
+// - Sale
+builder.Services.AddScoped<GetAllSalesUseCase>();
 
 var app = builder.Build();
 
