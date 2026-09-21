@@ -1,13 +1,12 @@
 ﻿using SalesFlowAutomation.Application.Common;
 using SalesFlowAutomation.Application.Payments.Interfaces;
 using SalesFlowAutomation.Application.Sales.DTOs;
-using SalesFlowAutomation.Application.Sales.Interfaces;
 using SalesFlowAutomation.Application.UseCases.Sales;
 using SalesFlowAutomation.Domain.Entities;
 using SalesFlowAutomation.Domain.Enums;
 using SalesFlowAutomation.Tests.Fakes;
 
-namespace SalesFlowAutomation.Tests.Application
+namespace SalesFlowAutomation.Tests.Application.SaleTest
 {
     public class CreateSaleUseCaseTests
     {
@@ -157,23 +156,6 @@ namespace SalesFlowAutomation.Tests.Application
                 _payments.Add(payment);
 
                 return Task.CompletedTask;
-            }
-        }
-
-        private class FakeSaleRepository : ISaleRepository
-        {
-            private readonly List<Sale> _sales = new();
-            public IReadOnlyCollection<Sale> Sales => _sales.AsReadOnly();
-            public Task AddAsync(Sale sale)
-            {
-                _sales.Add(sale);
-
-                return Task.CompletedTask;
-            }
-
-            public Task<Sale?> GetByIdAsync(int id)
-            {
-                throw new NotImplementedException();
             }
         }
 

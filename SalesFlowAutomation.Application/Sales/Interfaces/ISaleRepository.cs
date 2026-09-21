@@ -7,5 +7,6 @@ namespace SalesFlowAutomation.Application.Sales.Interfaces
     {
         Task AddAsync(Sale sale);
         Task<Sale?> GetByIdAsync(int id);
+        Task<List<Sale>> GetAllAsync();
     }
 }

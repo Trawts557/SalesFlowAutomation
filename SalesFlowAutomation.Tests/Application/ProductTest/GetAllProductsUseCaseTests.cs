@@ -29,24 +29,16 @@ namespace SalesFlowAutomation.Tests.Application.ProductTest
 
             List<ProductResponse> productList = await _getAllProductsUseCase.ExecuteAsync();
 
-            var getBattery = _fakeProductRepository.Products.Single(p => p.Id == battery.Id);
-            var getCharger = _fakeProductRepository.Products.Single(p => p.Id == charger.Id);
-            var getWire = _fakeProductRepository.Products.Single(p => p.Id == wire.Id);
+            Assert.Equal(3, productList.Count);
 
-            Assert.NotEmpty(_fakeProductRepository.Products);
+            Assert.Contains(productList, p => p.Id == battery.Id
+            && p.Name == battery.Name && p.UnitPrice == battery.UnitPrice);
 
-            Assert.Equal(battery.Id, getBattery.Id);
-            Assert.Equal(battery.Name, getBattery.Name);
-            Assert.Equal(battery.UnitPrice, getBattery.UnitPrice);
+            Assert.Contains(productList, p => p.Id == charger.Id
+            && p.Name == charger.Name && p.UnitPrice == charger.UnitPrice);
 
-            Assert.Equal(charger.Id, getCharger.Id);
-            Assert.Equal(charger.Name, getCharger.Name);
-            Assert.Equal(charger.UnitPrice, getCharger.UnitPrice);
-
-            Assert.Equal(wire.Id, getWire.Id);
-            Assert.Equal(wire.Name, getWire.Name);
-            Assert.Equal(wire.UnitPrice, getWire.UnitPrice);
-
+            Assert.Contains(productList, p => p.Id == wire.Id
+            && p.Name == wire.Name && p.UnitPrice == wire.UnitPrice);
         }
 
         [Fact]

@@ -21,6 +21,16 @@ namespace SalesFlowAutomation.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<Sale>> GetAllAsync()
+        {
+            var sales = await _context.Sales
+                .Include(s => s.Details)
+                .Include(s => s.Payment)
+                .ToListAsync();
+
+            return sales;
+        }
+
         public async Task<Sale?> GetByIdAsync(int id)
         {
             var sale = await _context.Sales

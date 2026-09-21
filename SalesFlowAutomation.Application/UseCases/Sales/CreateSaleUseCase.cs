@@ -9,7 +9,7 @@ using SalesFlowAutomation.Domain.Exceptions;
 
 namespace SalesFlowAutomation.Application.UseCases.Sales
 {
-    public class CreateSaleUseCase : ICreateSaleUseCase
+    public class CreateSaleUseCase
     {
         private readonly IProductRepository _productRepository;
         private readonly IPaymentRepository _paymentRepository;
