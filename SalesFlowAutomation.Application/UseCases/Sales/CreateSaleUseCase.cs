@@ -1,6 +1,5 @@
 ﻿
 using SalesFlowAutomation.Application.Common;
-using SalesFlowAutomation.Application.Payments.Interfaces;
 using SalesFlowAutomation.Application.Products.Interfaces;
 using SalesFlowAutomation.Application.Sales.DTOs;
 using SalesFlowAutomation.Application.Sales.Interfaces;
@@ -12,15 +11,12 @@ namespace SalesFlowAutomation.Application.UseCases.Sales
     public class CreateSaleUseCase
     {
         private readonly IProductRepository _productRepository;
-        private readonly IPaymentRepository _paymentRepository;
         private readonly ISaleRepository _saleRepository;
 
         public CreateSaleUseCase(IProductRepository productRepository,
-            IPaymentRepository paymentRepository,
             ISaleRepository saleRepository)
         {
             _productRepository = productRepository;
-            _paymentRepository = paymentRepository;
             _saleRepository = saleRepository;
         }
 
@@ -43,8 +39,8 @@ namespace SalesFlowAutomation.Application.UseCases.Sales
 
                 await AddSaleDetailsAsync(request, sale);
 
+                // The system register the payment method and simulates it was paid
                 payment = new Payment(sale.Total, request.PaymentMethod);
-
                 payment.MarkAsPaid();
 
                 sale.AddPayment(payment);
@@ -59,10 +55,10 @@ namespace SalesFlowAutomation.Application.UseCases.Sales
             }
 
             await _saleRepository.AddAsync(sale);
-            await _paymentRepository.AddAsync(payment);
 
             var response = new CreateSaleResponse
             {
+                SaleId = sale.Id,
                 PaymentStatus = payment.PaymentStatus,
                 DiscountAmount = sale.DiscountAmount,
                 Subtotal = sale.Subtotal,
