@@ -8,7 +8,7 @@ namespace SalesFlowAutomation.Application.Sales.DTOs
         public int CashierId { get; set; }
         public int? CustomerId { get; set; }
 
-        public List<SaleDetailResponse> Details = [];
+        public List<SaleDetailResponse> Details { get; set; } = [];
 
         public decimal Subtotal { get; set; }
         public decimal TaxAmount { get; set; }

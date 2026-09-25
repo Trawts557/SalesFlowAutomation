@@ -9,6 +9,7 @@ namespace SalesFlowAutomation.Api.Controllers
     [ApiController]
     public class SalesController(
         GetAllSalesUseCase getAllSalesUseCase,
+        GetSaleByIdUseCase getSaleByIdUseCase,
         CreateSaleUseCase createSaleUseCase
         ) : ControllerBase
     {
@@ -34,12 +35,30 @@ namespace SalesFlowAutomation.Api.Controllers
             }
 
             return Ok(new
-                {
-                    response.Message,
-                    response.Data
-                }
-            );
+            {
+                response.Message,
+                response.Data
+            });
+        }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            //if (id <= 0)
+            //    return BadRequest("Id must be greater than zero");
+
+            OperationResult<SaleResponse> response = await getSaleByIdUseCase.ExecuteAsync(id);
+
+            if (!response.IsSuccess)
+            {
+                if (response.StatusCode == 400)
+                    return BadRequest(response.Message);
+
+                if (response.StatusCode == 404)
+                    return NotFound(response.Message);
+            }
+
+            return Ok(response.Data);
         }
     }
 }

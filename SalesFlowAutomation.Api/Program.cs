@@ -32,6 +32,8 @@ builder.Services.AddScoped<DeleteProductUseCase>();
 
 // - Sale
 builder.Services.AddScoped<GetAllSalesUseCase>();
+builder.Services.AddScoped<GetSaleByIdUseCase>();
+
 builder.Services.AddScoped<CreateSaleUseCase>();
 
 var app = builder.Build();
