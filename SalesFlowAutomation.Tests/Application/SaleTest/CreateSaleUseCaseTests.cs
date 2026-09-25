@@ -12,7 +12,6 @@ namespace SalesFlowAutomation.Tests.Application.SaleTest
     {
         private readonly FakeSaleRepository _saleRepository;
         private readonly FakeProductRepository _productRepository;
-        private readonly FakePaymentRepository _paymentRepository;
         private readonly CreateSaleUseCase _createSaleUseCase;
 
         public CreateSaleUseCaseTests()
@@ -23,7 +22,6 @@ namespace SalesFlowAutomation.Tests.Application.SaleTest
 
             _createSaleUseCase = new CreateSaleUseCase(
                 _productRepository,
-                _paymentRepository,
                 _saleRepository
             );
         }
