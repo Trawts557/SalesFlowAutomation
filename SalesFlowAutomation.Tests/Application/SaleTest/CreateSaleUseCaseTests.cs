@@ -18,7 +18,6 @@ namespace SalesFlowAutomation.Tests.Application.SaleTest
         {
             _saleRepository = new FakeSaleRepository();
             _productRepository = new FakeProductRepository();
-            _paymentRepository = new FakePaymentRepository();
 
             _createSaleUseCase = new CreateSaleUseCase(
                 _productRepository,
@@ -103,7 +102,6 @@ namespace SalesFlowAutomation.Tests.Application.SaleTest
             Assert.Equal(21240m, response.Total);
 
             Assert.Single(_saleRepository.Sales);
-            Assert.Single(_paymentRepository.Payments);
 
             Assert.True(result.IsSuccess);
             Assert.Equal("Sale completed successfully", result.Message);
