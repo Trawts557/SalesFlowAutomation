@@ -1,5 +1,6 @@
 ﻿using SalesFlowAutomation.Application.Sales.DTOs;
 using SalesFlowAutomation.Application.Sales.Interfaces;
+using SalesFlowAutomation.Domain.Enums;
 
 namespace SalesFlowAutomation.Application.UseCases.Sales
 {
@@ -12,47 +13,22 @@ namespace SalesFlowAutomation.Application.UseCases.Sales
             _saleRepository = saleRepository;
         }
 
-        public async Task<List<SaleResponse>> ExecuteAsync()
+        public async Task<List<SaleListResponse>> ExecuteAsync()
         {
             var sales = await _saleRepository.GetAllAsync(); 
 
-            List<SaleResponse> saleResponseList = [];
+            List<SaleListResponse> saleResponseList = [];
             
             foreach (var sale in sales)
             {
-                var paymentResponse = new PaymentResponse
-                {
-                    Id = sale.Payment.Id,
-                    SaleId = sale.Payment.SaleId,
-                    Amount = sale.Payment.Amount,
-                    PaymentMethod = sale.Payment.PaymentMethod,
-                    PaymentStatus = sale.Payment.PaymentStatus
-                };
-
-                List<SaleDetailResponse> saleDetailResponseList = [];
-
-                foreach (var detail in sale.Details)
-                {
-                    saleDetailResponseList.Add(
-                        new SaleDetailResponse
-                        {
-                            ProductId = detail.ProductId,
-                            ProductName = detail.Name,
-                            UnitPrice = detail.UnitPrice,
-                            Quantity = detail.Quantity,
-                            TaxAmount = detail.TaxAmount,
-                            Subtotal = detail.Subtotal
-                        });
-                }
-
                 saleResponseList.Add(
-                    new SaleResponse 
+                    new SaleListResponse 
                     {
                         Id = sale.Id,
-                        Payment = paymentResponse,
+                        PaymentStatus = sale.Payment!.PaymentStatus,
                         CashierId = sale.CashierId,
                         CustomerId = sale.CustomerId,
-                        Details = saleDetailResponseList,
+                        DetailsCount = sale.Details.Count(),
                         Subtotal = sale.Subtotal,
                         TaxAmount = sale.TaxAmount,
                         DiscountAmount = sale.DiscountAmount,

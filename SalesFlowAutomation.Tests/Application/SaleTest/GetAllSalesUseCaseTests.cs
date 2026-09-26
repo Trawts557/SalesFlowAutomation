@@ -56,28 +56,26 @@ namespace SalesFlowAutomation.Tests.Application.SaleTest
             await _fakeSaleRepository.AddAsync(sale1);
             await _fakeSaleRepository.AddAsync(sale2);
 
-            List<SaleResponse> saleList = await _getAllSalesUseCase.ExecuteAsync();
+            List<SaleListResponse> saleList = await _getAllSalesUseCase.ExecuteAsync();
 
             Assert.Equal(2, saleList.Count);
 
             Assert.Contains(saleList, s =>
             s.Id == sale1.Id &&
-            s.Payment!.Amount == payment1.Amount &&
-            s.Payment.PaymentStatus == payment1.PaymentStatus &&
-            s.Details.Count == 1 &&
-            s.Details[0].ProductId == battery.Id &&
-            s.Details[0].ProductName == battery.Name &&
-            s.Details[0].Quantity == 12
+            s.TaxAmount == sale1.TaxAmount &&
+            s.DiscountAmount == sale1.DiscountAmount &&
+            s.Total == sale1.Total &&
+            s.PaymentStatus == payment1.PaymentStatus &&
+            s.DetailsCount == 1
             );
 
             Assert.Contains(saleList, s =>
             s.Id == sale2.Id &&
-            s.Payment!.Amount == payment2.Amount &&
-            s.Payment.PaymentStatus == payment2.PaymentStatus &&
-            s.Details.Count == 1 &&
-            s.Details[0].ProductId == charger.Id &&
-            s.Details[0].ProductName == charger.Name &&
-            s.Details[0].Quantity == 7
+            s.TaxAmount == sale2.TaxAmount &&
+            s.DiscountAmount == sale2.DiscountAmount &&
+            s.Total == sale2.Total &&
+            s.PaymentStatus == payment2.PaymentStatus &&
+            s.DetailsCount == 1
             );
 
         }

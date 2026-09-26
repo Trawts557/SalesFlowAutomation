@@ -16,9 +16,9 @@ namespace SalesFlowAutomation.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            List<SaleResponse> saleResponses = await getAllSalesUseCase.ExecuteAsync();
+            List<SaleListResponse> saleListResponse = await getAllSalesUseCase.ExecuteAsync();
 
-            return Ok(saleResponses);
+            return Ok(saleListResponse);
         }
 
         [HttpPost]
