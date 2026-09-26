@@ -32,7 +32,7 @@ namespace SalesFlowAutomation.Tests.Application.SaleTest
             Sale sale1 = sales[0];
 
             Assert.True(response.IsSuccess);
-            Assert.Equal("Product obtained succesfully", response.Message);
+            Assert.Equal("Sale obtained succesfully", response.Message);
             Assert.NotNull(response.Data);
 
             SaleResponse data = response.Data;

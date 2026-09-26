@@ -1,6 +1,5 @@
 ﻿using SalesFlowAutomation.Application.Sales.DTOs;
 using SalesFlowAutomation.Application.Sales.Interfaces;
-using SalesFlowAutomation.Domain.Enums;
 
 namespace SalesFlowAutomation.Application.UseCases.Sales
 {

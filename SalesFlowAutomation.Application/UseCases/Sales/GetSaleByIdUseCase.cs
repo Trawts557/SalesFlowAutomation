@@ -23,7 +23,7 @@ namespace SalesFlowAutomation.Application.UseCases.Sales
             var sale = await _saleRepository.GetByIdAsync(id);
 
             if (sale is null)
-                return OperationResult<SaleResponse>.Failure($"Product with id [{id}] not found", 404);
+                return OperationResult<SaleResponse>.Failure($"Sale with id [{id}] not found", 404);
 
             // Mapping Payment to PaymentResponse
             var paymentResponse = new PaymentResponse
@@ -66,7 +66,7 @@ namespace SalesFlowAutomation.Application.UseCases.Sales
                 Total = sale.Total
             };
 
-            return OperationResult<SaleResponse>.Success(saleResponse, "Product obtained succesfully");
+            return OperationResult<SaleResponse>.Success(saleResponse, "Sale obtained succesfully");
         }
     }
 }
